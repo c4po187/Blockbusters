@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Sports
+     Q/A Compilation -->
+
+<Sports>
+
+  <!-- 1 - Chicago 'Bulls' -->
+  <QA>
+    <Question answer="C" difficulty="easy" alpha="C">The US basketball team "The Bulls" represent which city beginning with 'C'?</Question>
+    <Answers>
+      <A>Cleveland</A>
+      <B>Cincinnati</B>
+      <C>Chicago</C>
+      <D>Colorado Springs</D>
+    </Answers>
+  </QA>
+
+  <!-- 2 - The number 12 sits between 5 & 9, YGM! -->
+  <QA>
+    <Question answer="B" difficulty="easy" alpha="T">What 'T is the number that sits between 5 and 9 on a British dart board?</Question>
+    <Answers>
+      <A>Two</A>
+      <B>Twelve</B>
+      <C>Twenty</C>
+      <D>Three</D>
+    </Answers>
+  </QA>
+
+  <!-- 3 - Sam Burgess joined Bath in 2014 -->
+  <QA>
+    <Question answer="A" difficulty="hard" alpha="B">What 'B' is the surname of the England rugby league forward (first name, Sam), who joined Bath rugby union club in 2014?</Question>
+    <Answers>
+      <A>Burgess</A>
+      <B>Barker</B>
+      <C>Bayliss</C>
+      <D>Bramley</D>
+    </Answers>
+  </QA>
+
+  <!-- 4 - Our Des, Table Tennis dappadon -->
+  <QA>
+    <Question answer="C" difficulty="medium" alpha="T">During the 1980's, which 'T' was the name of the sport that Desmond Douglas reached world number 7?</Question>
+    <Answers>
+      <A>Taekwondo</A>
+      <B>Tennis</B>
+      <C>Table Tennis</C>
+      <D>Triathlon</D>
+    </Answers>
+  </QA>
+
+  <!-- 5 - 6 players on the Ice Hockey team -->
+  <QA>
+    <Question answer="A" difficulty="easy" alpha="S">What 'S' is the number of players (including the Goaltender), that make up an ice hockey team?</Question>
+    <Answers>
+      <A>Six</A>
+      <B>Seven</B>
+      <C>Sixteen</C>
+      <D>Seventeen</D>
+    </Answers>
+  </QA>
+
+  <!-- 6 - Sabina Park is a cricket ground in Jamaica -->
+  <QA>
+    <Question answer="D" difficulty="medium" alpha="J">The sporting ground, Sabina Park is which country beginning with 'J'?</Question>
+    <Answers>
+      <A>Japan</A>
+      <B>Jordan</B>
+      <C>Jersey</C>
+      <D>Jamaica</D>
+    </Answers>
+  </QA>
+
+  <!-- 7 - Becks ended his Euro club career at PSG -->
+  <QA>
+    <Question answer="B" difficulty="medium" alpha="P">What 'P' is the European club, David Backham ended his career with?</Question>
+    <Answers>
+      <A>Parma</A>
+      <B>Paris Saint-Germain</B>
+      <C>Porto</C>
+      <D>PSV</D>
+    </Answers>
+  </QA>
+
+  <!-- 8 - Open Championship has 72 holes to be contested -->
+  <QA>
+    <Question answer="D" difficulty="medium" alpha="S">In golf, what 'S' is the number of holes contested for the Open Championship?</Question>
+    <Answers>
+      <A>Seven</A>
+      <B>Seventeen</B>
+      <C>Seventy</C>
+      <D>Seventy-Two</D>
+    </Answers>
+  </QA>
+
+  <!-- 9 - Mon Mome won that national at 100/1, why didn't I bet? :( -->
+  <QA>
+    <Question answer="C" difficulty="medium" alpha="M">What 'M' was the name of the horse who won the 2009 Grand National as a 100/1 outsider?</Question>
+    <Answers>
+      <A>Maximus</A>
+      <B>Melle's Mucker</B>
+      <C>Mon Mome</C>
+      <D>Mayuer Flamboille</D>
+    </Answers>
+  </QA>
+
+  <!-- 10 - The San Siro is in Milan -->
+  <QA>
+    <Question answer="D" difficulty="easy" alpha="M">What 'M' is the name of the city where the San Siro stadium is situated?</Question>
+    <Answers>
+      <A>Marsciano</A>
+      <B>Monza</B>
+      <C>Modena</C>
+      <D>Milan</D>
+    </Answers>
+  </QA>
+
+  <!-- 11 - Kareem obviously likes his basketball -->
+  <QA>
+    <Question answer="A" difficulty="medium" alpha="B">Kareem Abdul-Jabbar played 20 seasons in which sport beginning with 'B'?</Question>
+    <Answers>
+      <A>Basketball</A>
+      <B>Badminton</B>
+      <C>Baseball</C>
+      <D>Bowling</D>
+    </Answers>
+  </QA>
+
+  <!-- 12 - The Jack is where its at in bowls -->
+  <QA>
+    <Question answer="C" difficulty="easy" alpha="J">What 'J' is the name of the target ball in bowls?</Question>
+    <Answers>
+      <A>Joe</A>
+      <B>Julie</B>
+      <C>Jack</C>
+      <D>Jill</D>
+    </Answers>
+  </QA>
+
+  <!-- 13 - An eagle is 2 under par -->
+  <QA>
+    <Question answer="B" difficulty="easy" alpha="E">In golf, what 'E' is a term given to completing a hole two under par?</Question>
+    <Answers>
+      <A>Emu</A>
+      <B>Eagle</B>
+      <C>Eaton's Pintail</C>
+      <D>Ebony Myzomela</D>
+    </Answers>
+  </QA>
+
+  <!-- 14 - Gold is the centre colour -->
+  <QA>
+    <Question answer="D" difficulty="medium" alpha="G">What 'G' is the colour of the innermost zone in an archery target?</Question>
+    <Answers>
+      <A>Green</A>
+      <B>Gray</B>
+      <C>Gamboge</C>
+      <D>Gold</D>
+    </Answers>
+  </QA>
+
+  <!-- 15 - Abu Dhabi, home of the Yas Marina Circuit -->
+  <QA>
+    <Question answer="D" difficulty="medium" alpha="A">What 'A' is the location of the Yas Marina Motor Racing Circuit?</Question>
+    <Answers>
+      <A>Ajman</A>
+      <B>Al Falah</B>
+      <C>Al Bahya</C>
+      <D>Abu Dhabi</D>
+    </Answers>
+  </QA>
+  
+  <!-- TEMPLATE
+    
+  <QA>
+    <Question answer="" difficulty="" alpha=""></Question>
+    <Answers>
+      <A></A>
+      <B></B>
+      <C></C>
+      <D></D>
+    </Answers>
+  </QA>
+  
+  -->
+  
+</Sports> 

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Geography 
+     Q/A Compilation -->
+
+<Geography>
+	
+	<!-- 1 - Capital of Sweden -->
+	<QA>
+		<Question answer="B" difficulty="easy" alpha="S">What 'S' is the capital of Sweden?</Question>
+		<Answers>
+			<A>Seoul</A>
+			<B>Stockholm</B>
+			<C>Sydney</C>
+			<D>Southampton</D>
+		</Answers>
+	</QA>
+	
+	<!-- 2 - Active Volcano in Europe -->
+	<QA>
+		<Question answer="D" difficulty="medium" alpha="E">What 'E' is the name of the only active volcano in Europe?</Question>
+		<Answers>
+			<A>Everest</A>
+			<B>Elgaard</B>
+			<C>Esra</C>
+			<D>Etna</D>
+		</Answers>
+	</QA>
+	
+	<!-- 3 - Albert Canal -->
+	<QA>
+		<Question answer="A" difficulty="hard" alpha="B">Which country beginning with a 'B', would you find the Albert Canal?</Question>
+		<Answers>
+			<A>Belgium</A>
+			<B>Bulgaria</B>
+			<C>Belarus</C>
+			<D>Brazil</D>
+		</Answers>
+	</QA>
+	
+	<!-- 4 - Prado Art Gallery -->
+	<QA>
+		<Question answer="C" difficulty="hard" alpha="M">Which city beginning with 'M', would you find the Prado art gallery?</Question>
+		<Answers>
+			<A>Marseille</A>
+			<B>Milan</B>
+			<C>Madrid</C>
+			<D>Manchester</D>
+		</Answers>
+	</QA>
+	
+	<!-- 5 - Pheonix Park -->
+	<QA>
+		<Question answer="A" difficulty="hard" alpha="D">Which city beginning with 'D', would you find Pheonix Park?</Question>
+		<Answers>
+			<A>Dublin</A>
+			<B>Derby</B>
+			<C>Doncaster</C>
+			<D>Dudley</D>
+		</Answers>
+	</QA>
+  
+  <!-- 6 - Edirne, city in Turkey -->
+  <QA>
+    <Question answer="C" difficulty="medium" alpha="T">In which country beginning with 'T' is the city Edirne?</Question>
+    <Answers>
+      <A>Tunisia</A>
+      <B>Tibet</B>
+      <C>Turkey</C>
+      <D>Taiwan</D>
+    </Answers>
+  </QA>
+
+  <!-- 7 - Once upon a time Abyssinia, now Ethiopia -->
+  <QA>
+    <Question answer="A" difficulty="medium" alpha="E">What 'E', is the country formerly known as Abyssinia?</Question>
+    <Answers>
+      <A>Ethiopia</A>
+      <B>Egypt</B>
+      <C>Ecuador</C>
+      <D>Estonia</D>
+    </Answers>
+  </QA>
+
+  <!-- 8 - Mountains in Antarctica -->
+  <QA>
+    <Question answer="D" difficulty="medium" alpha="A">Where, beginning with 'A', would you find the Queen Alexandra, Queen Elizabeth and Queen Maud mountain ranges?</Question>
+    <Answers>
+      <A>Arctic Pole</A>
+      <B>Australia</B>
+      <C>Angola</C>
+      <D>Antarctica</D>
+    </Answers>
+  </QA>
+
+  <!-- 9 - Tenge, money up in Kazakhstan -->
+  <QA>
+    <Question answer="B" difficulty="hard" alpha="K">What 'K' is a country that has a basic monetry unit called the tenge?</Question>
+    <Answers>
+      <A>Kuwait</A>
+      <B>Kazakhstan</B>
+      <C>Kenya</C>
+      <D>Kurdistan</D>
+    </Answers>
+  </QA>
+
+  <!-- 10 - Spanish is the lingo of Bogota, Columbia -->
+  <QA>
+    <Question answer="B" difficulty="easy" alpha="S">What 'S' is the language commonly spoken in the city of Bogota?</Question>
+    <Answers>
+      <A>Somali</A>
+      <B>Spanish</B>
+      <C>Swahili</C>
+      <D>Swedish</D>
+    </Answers>
+  </QA>
+
+  <!-- 11 - Qatar captial city is Doha -->
+  <QA>
+    <Question answer="D" difficulty="medium" alpha="D">What 'D' is the capital city of Qatar?</Question>
+    <Answers>
+      <A>Doho</A>
+      <B>Dahu</B>
+      <C>Duhu</C>
+      <D>Doha</D>
+    </Answers>
+  </QA>
+
+  <!-- 12 - The first Irn bridge was built in Shropshire -->
+  <QA>
+    <Question answer="C" difficulty="medium" alpha="S">In which English county beginning with 'S', will you find the first Iron bridge ever built?</Question>
+    <Answers>
+      <A>Sussex</A>
+      <B>South Yorkshire</B>
+      <C>Shropshire</C>
+      <D>Staffordshire</D>
+    </Answers>
+  </QA>
+
+  <!-- 13 - Wyoming, sure be a lonely place -->
+  <QA>
+    <Question answer="D" difficulty="hard" alpha="W">Which 'W' is the least populated state in the USA?</Question>
+    <Answers>
+      <A>Washington</A>
+      <B>West Virginia</B>
+      <C>Wisconsin</C>
+      <D>Wyoming</D>
+    </Answers>
+  </QA>
+
+  <!-- 14 - .me be the domain of Montenegro -->
+  <QA>
+    <Question answer="A" difficulty="easy" alpha="M">What 'M' is the name of the country, whose internet domain is .me?</Question>
+    <Answers>
+      <A>Montenegro</A>
+      <B>Monaco</B>
+      <C>Macedonia</C>
+      <D>Mexico</D>
+    </Answers>
+  </QA>
+
+  <!-- 15 - Thames run through many manor -->
+  <QA>
+    <Question answer="B" difficulty="easy" alpha="T">What 'T' is the name of a river shared by Oxford, Reading, Windsor and London?</Question>
+    <Answers>
+      <A>Tyne</A>
+      <B>Thames</B>
+      <C>Trent</C>
+      <D>Tees</D>
+    </Answers>
+  </QA>
+  
+  <!-- TEMPLATE
+    
+  <QA>
+    <Question answer="" difficulty="" alpha=""></Question>
+    <Answers>
+      <A></A>
+      <B></B>
+      <C></C>
+      <D></D>
+    </Answers>
+  </QA>
+  
+  -->
+	
+</Geography>

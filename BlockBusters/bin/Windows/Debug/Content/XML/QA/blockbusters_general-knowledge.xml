@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!-- General Knowledge
+     Q/A Compilation -->
+
+<GeneralKnowledge>
+
+  <!-- 1 - Bouncer on the door -->
+  <QA>
+    <Question answer="B" difficulty="easy" alpha="B">Which 'B' is a term associated with door security staff?</Question>
+    <Answers>
+      <A>Bomber</A>
+      <B>Bouncer</B>
+      <C>Banger</C>
+      <D>Bully</D>
+    </Answers>
+  </QA>
+
+  <!-- 2 - Amaretto is a liqueur made with Almonds -->
+  <QA>
+    <Question answer="D" difficulty="medium" alpha="A">What 'A' is a liqueur made with Almonds?</Question>
+    <Answers>
+      <A>Absinthe</A>
+      <B>Averna</B>
+      <C>Advocaat</C>
+      <D>Amaretto</D>
+    </Answers>
+  </QA>
+
+  <QA>
+    <Question answer="B" difficulty="medium" alpha="D">What 'D' was the previous brand-name of the Nissan automotive corporation?</Question>
+    <Answers>
+      <A>Daewoo</A>
+      <B>Datsun</B>
+      <C>Daimler</C>
+      <D>Dayton</D>
+    </Answers>
+  </QA>
+  
+  <!-- TEMPLATE
+    
+  <QA>
+    <Question answer="" difficulty="" alpha=""></Question>
+    <Answers>
+      <A></A>
+      <B></B>
+      <C></C>
+      <D></D>
+    </Answers>
+  </QA>
+  
+  -->
+  
+</GeneralKnowledge>
