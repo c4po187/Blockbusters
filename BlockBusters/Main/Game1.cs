@@ -189,6 +189,9 @@ namespace BlockBusters.Main {
             g_players[1] = new Human("Wesley", Textures.tex_DBG_GPIC2) {
                 Position = new Vector2(1240f, 625f), ReverseLayout = true
             };
+
+            /***** DEBUG *****/
+            //Console.WriteLine("All content loaded successfully...");
         }
 
         /// <summary>

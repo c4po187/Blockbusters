@@ -1,7 +1,10 @@
 ﻿#region Prerequisites
 
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
+using Microsoft.Win32.SafeHandles;
 
 #endregion
 
@@ -61,6 +64,11 @@ namespace BlockBusters {
                           MB_SERVICE_NOTIFICATION = 0x00200000;
     }
 
+    public static class EssentialMacros {
+        public const int STD_OUTPUT_HANDLE = -11,
+                         MS_CODE_PAGE = 437;
+    }
+
     #endregion
 
     #region Objects
@@ -93,8 +101,33 @@ namespace BlockBusters {
         /// <returns>
         /// An integer value that indicates which button the user clicked.
         /// </returns>
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        [DllImport("user32.dll", 
+            CharSet = CharSet.Auto)]
         public static extern uint MessageBox(IntPtr hWnd, String text, String caption, uint type);
+
+        [DllImport("kernel32.dll",
+            EntryPoint = "GetStdHandle",
+            SetLastError = true,
+            CharSet = CharSet.Auto,
+            CallingConvention = CallingConvention.StdCall)]
+        public static extern IntPtr GetStdHandle(int nStdHandle);
+
+        [DllImport("kernel32.dll",
+            EntryPoint = "AllocConsole",
+            SetLastError = true,
+            CharSet = CharSet.Auto,
+            CallingConvention = CallingConvention.StdCall)]
+        public static extern int AllocConsole();
+
+        public static void setupConsole() {
+            IntPtr handle = GetStdHandle(EssentialMacros.STD_OUTPUT_HANDLE);
+            SafeFileHandle safeFileHandle = new SafeFileHandle(handle, true);
+            FileStream fileStream = new FileStream(safeFileHandle, FileAccess.Write);
+            Encoding encoding = System.Text.Encoding.GetEncoding(EssentialMacros.MS_CODE_PAGE);
+            StreamWriter stdout = new StreamWriter(fileStream, encoding);
+            stdout.AutoFlush = true;
+            Console.SetOut(stdout);
+        }
     }
 
     #endregion

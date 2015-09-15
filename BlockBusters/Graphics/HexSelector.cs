@@ -155,6 +155,43 @@ namespace BlockBusters.Graphics {
         }
 
         /// <summary>
+        /// Sets the selector to the position of the mouse.
+        /// </summary>
+        /// <param name="inputManager">
+        /// Parameter represents the current input manager.
+        /// </param>
+        /// <returns>
+        /// True if the mouse is in a playable hexagon.
+        /// False otherwise.
+        /// </returns>
+        private bool relativeToMouse(InputManager inputManager) {
+            bool isRelative = false;
+            
+            foreach (BoardHexagon hex in m_playableHexagons) {
+                if (inputManager.MouseLocation.X > hex.destination.Left &&
+                    inputManager.MouseLocation.X < hex.destination.Right &&
+                    inputManager.MouseLocation.Y > hex.destination.Top &&
+                    inputManager.MouseLocation.Y < hex.destination.Bottom) {
+                    
+                    m_position.X = (float)hex.destination.Center.X;
+                    m_position.Y = (float)hex.destination.Center.Y;
+                    isRelative = true;
+                    
+                    if (inputManager.isLeftMouseButtonTapped() && Visibility)
+                        m_chosenLetter = getLetterFromCurrentHexagon();
+                    if (inputManager.isRightMouseButtonTapped() && Visibility) {
+                        m_board.CurrentBoardState = BoardState.ScramblingColours;
+                        m_board.ScramblePerTimer = m_board.ScrambleTimer = 0.0;
+                    }
+
+                    break;
+                }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+            }
+
+            return isRelative;
+        }
+
+        /// <summary>
         /// Updates the logic of the Selector.
         /// </summary>
         /// <param name="gameTime">
@@ -171,61 +208,64 @@ namespace BlockBusters.Graphics {
             Vector2 prevPosition = new Vector2(m_position.X, m_position.Y);
 
             // Detect selection
-            if (inputManager.isKeyTapped(Keys.Enter) || inputManager.isATapped())
+            if ((inputManager.isKeyTapped(Keys.Enter) || inputManager.isATapped()) && Visibility)
                 m_chosenLetter = getLetterFromCurrentHexagon();
 
             /***** DEBUG *****/
-            if (inputManager.isKeyTapped(Keys.Escape))
+            if (inputManager.isKeyTapped(Keys.Escape) && Visibility)
                 m_board.refreshLetters();
-            if (inputManager.isKeyTapped(Keys.C)) {
+            if (inputManager.isKeyTapped(Keys.C) && Visibility) {
                 m_board.CurrentBoardState = BoardState.ScramblingColours;
                 m_board.ScramblePerTimer = m_board.ScrambleTimer = 0.0;
             }
                 
-
             // Bound parameters
             float topBound = (float)m_board.BoardHexagons[7].destination.Center.Y;
             float leftBound = (float)m_board.BoardHexagons[7].destination.Center.X;
             float rightBound = (float)m_board.BoardHexagons[9].destination.Center.X;
             float bottomBound = (float)m_board.BoardHexagons[33].destination.Center.Y;
 
-            // Set movement parameters
-            float hzMove = (float)m_board.HexTile.evenRow_offsetX;
-            float vtMove = (float)m_board.HexTile.height + 4;
-            MoveDirection moveDirection = getDirection(inputManager, bottomBound);
+            // Check for Mouse position
+            if (!relativeToMouse(inputManager)) {
+                // Set movement parameters
+                float hzMove = (float)m_board.HexTile.evenRow_offsetX;
+                float vtMove = (float)m_board.HexTile.height + 4;
+                MoveDirection moveDirection = getDirection(inputManager, bottomBound);
 
-            // Move selector
-            if (!m_bisDelay) {
-                Visibility = true;
-                switch (moveDirection) {
-                    case MoveDirection.Up:
-                        m_position.Y -= vtMove;
-                        break;
-                    case MoveDirection.Down:
-                        m_position.Y += vtMove;
-                        break;
-                    case MoveDirection.LeftUp:
-                        m_position += new Vector2(-hzMove, -(0.5f * vtMove));
-                        break;
-                    case MoveDirection.LeftDown:
-                        m_position += new Vector2(-hzMove, (0.5f * vtMove));
-                        break;
-                    case MoveDirection.RightUp:
-                        m_position += new Vector2(hzMove, -(0.5f * vtMove));
-                        break;
-                    case MoveDirection.RightDown:
-                        m_position += new Vector2(hzMove, (0.5f * vtMove));
-                        break;
-                    case MoveDirection.Idle:
-                        break;
+                // Move selector
+                if (!m_bisDelay) {
+                    Visibility = true;
+                    switch (moveDirection) {
+                        case MoveDirection.Up:
+                            m_position.Y -= vtMove;
+                            break;
+                        case MoveDirection.Down:
+                            m_position.Y += vtMove;
+                            break;
+                        case MoveDirection.LeftUp:
+                            m_position += new Vector2(-hzMove, -(0.5f * vtMove));
+                            break;
+                        case MoveDirection.LeftDown:
+                            m_position += new Vector2(-hzMove, (0.5f * vtMove));
+                            break;
+                        case MoveDirection.RightUp:
+                            m_position += new Vector2(hzMove, -(0.5f * vtMove));
+                            break;
+                        case MoveDirection.RightDown:
+                            m_position += new Vector2(hzMove, (0.5f * vtMove));
+                            break;
+                        case MoveDirection.Idle:
+                            break;
+                    }
+                    m_bisDelay = true;
                 }
-                m_bisDelay = true;
-            } else {
-                // Create a slight delay before we can move again
-                m_delayTimer += gameTime.ElapsedGameTime.TotalSeconds;
-                if (m_delayTimer >= 0.1325) {
-                    m_delayTimer = 0.0;
-                    m_bisDelay = false;
+                else {
+                    // Create a slight delay before we can move again
+                    m_delayTimer += gameTime.ElapsedGameTime.TotalSeconds;
+                    if (m_delayTimer >= 0.1325) {
+                        m_delayTimer = 0.0;
+                        m_bisDelay = false;
+                    }
                 }
             }
 

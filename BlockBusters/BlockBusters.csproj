@@ -137,6 +137,7 @@
     </Content>
     <Content Include="Content\XML\QA\blockbusters_sports.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Icon.ico" />
   </ItemGroup>

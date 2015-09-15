@@ -21,6 +21,10 @@ namespace BlockBusters.Sys {
         [STAThread]
         static void Main()
         {
+            // Start Debug conole
+            //_WINAPI.AllocConsole();
+            //_WINAPI.setupConsole();
+
             using (var game = new Game1())
                 game.Run();
         }
