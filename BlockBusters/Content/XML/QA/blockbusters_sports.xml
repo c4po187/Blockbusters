@@ -18,7 +18,7 @@
 
   <!-- 2 - The number 12 sits between 5 & 9, YGM! -->
   <QA>
-    <Question answer="B" difficulty="easy" alpha="T">What 'T is the number that sits between 5 and 9 on a British dart board?</Question>
+    <Question answer="B" difficulty="easy" alpha="T">What 'T' is the number that sits between 5 and 9 on a British dart board?</Question>
     <Answers>
       <A>Two</A>
       <B>Twelve</B>

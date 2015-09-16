@@ -6,6 +6,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using BlockBusters.Main;
 using BlockBusters.Sys;
+using BlockBusters.Data;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -70,6 +71,14 @@ namespace BlockBusters.Graphics {
             m_boardState = BoardState.ScramblingColours;
             m_initPlayables = true;
             m_playableIndices = new List<int>();
+            
+            // Create Rectangles for the 4 choices
+            mcRects = new Rectangle[4];
+            int y = 180;
+            for (int r = 0; r < mcRects.Length; ++r) {
+                mcRects[r] = new Rectangle(660, y, 590, 60);
+                y += 80;
+            }
         }
 
         #endregion
@@ -85,6 +94,8 @@ namespace BlockBusters.Graphics {
         private double m_scrambleTimer, m_scramblePerTimer;
         private bool m_initPlayables;
         private BoardState m_boardState;
+        private QA m_currentQA;
+        private Rectangle[] mcRects;
 
         #endregion
 
@@ -126,6 +137,22 @@ namespace BlockBusters.Graphics {
             set { m_boardState = value; }
         }
 
+        /// <summary>
+        /// Gets and sets the current question and answer.
+        /// </summary>
+        public QA CurrentQA {
+            get { return m_currentQA; }
+            set { m_currentQA = value; }
+        }
+
+        /// <summary>
+        /// Sets the boolean that dictates whether we 
+        /// should render the question and answer.
+        /// </summary>
+        public bool RenderQA {
+            get; set;
+        }
+
         /***** DEBUG *****/
 
         public double ScrambleTimer {
@@ -161,7 +188,7 @@ namespace BlockBusters.Graphics {
                 try {
                     lines = File.ReadAllLines(path);
                     msgID = MessageBoxButtonOutput.IDOK;
-                } catch (IOException e) {
+                } catch (IOException) {
                   #if WINDOWS
                     msgID = _WINAPI.MessageBox(
                         new IntPtr(0), "Failed to locate board.txt...", "Error!",
@@ -280,6 +307,10 @@ namespace BlockBusters.Graphics {
                     refreshLetters();
                     break;
                 case BoardState.Standard:
+                    /**
+                     * @TODO:
+                     * Handle logic for multi-choice answer buttons/areas (simple contains)
+                     */ 
                     break;
             }
         }
@@ -326,6 +357,86 @@ namespace BlockBusters.Graphics {
                         charPosition, Color.Black);
                     ++i;
                 }
+            }
+
+            // Draw Question and Answer container
+            spriteBatch.Draw(Textures.tex_qaContainer, new Rectangle(
+                1280 - 5 - Textures.tex_qaContainer.Width, 25,
+                Textures.tex_qaContainer.Width, Textures.tex_qaContainer.Height), Color.White);
+
+            /* Draw the question and answer within the above container */
+
+            if (RenderQA) {
+                // We need to figure out how many characters we can fit within the container
+                float charWidth = Fonts.font_MainMenu.MeasureString("A").X;
+                int actualSpacial = Textures.tex_qaContainer.Width - 10;
+                int lenQ = m_currentQA.question.Length;
+
+                // How many characters will we get on?
+                int maxChars = (int)Math.Floor((float)actualSpacial / charWidth);
+
+                // Break the question down into a list of strings if needs be
+                List<string> seperatedQuestion = new List<string>();
+                string temp = string.Empty;
+                int qindex = 0, round = 1;
+
+                while (qindex < lenQ) {
+                    int spos = m_currentQA.question.IndexOf(" ", qindex);
+
+                    // Final word
+                    if (spos == -1)
+                        spos = lenQ - 1;
+
+                    if (spos < maxChars * round) {
+                        while (qindex <= spos) {
+                            temp += m_currentQA.question[qindex];
+                            ++qindex;
+                        }
+                        if (qindex == lenQ) {
+                            seperatedQuestion.Add(temp);
+                            temp = string.Empty;
+                        }
+                    } else {
+                        seperatedQuestion.Add(temp);
+                        temp = string.Empty;
+
+                        // Add on final part if any
+                        if (qindex < spos) {
+                            while (qindex <= spos) {
+                                temp += m_currentQA.question[qindex];
+                                ++qindex;
+                            }
+                            if (qindex == lenQ) {
+                                seperatedQuestion.Add(temp);
+                                temp = string.Empty;
+                            }
+                        }
+                        ++round;
+                    }
+                }
+
+                // Now let's print out the question
+                Vector2 qpos = new Vector2(660, 50);
+                foreach (string s in seperatedQuestion) {
+                    spriteBatch.DrawString(Fonts.font_MainMenu, s, qpos, Color.White);
+                    qpos.Y += 20.0f;
+                }
+
+                // Draw the rectangles
+                Textures.tex_Dummy.SetData(new Color[] { Color.FromNonPremultiplied(75, 110, 150, 255) });
+                foreach (Rectangle r in mcRects) {
+                    spriteBatch.Draw(Textures.tex_Dummy, r, Color.Turquoise);
+                }
+
+                // Draw the multi choices
+                spriteBatch.DrawString(Fonts.font_MainMenu, "A. " + m_currentQA.A, new Vector2(
+                    (float)mcRects[0].X + 2.5f, (float)mcRects[0].Y + 10.0f), Color.Black);
+                spriteBatch.DrawString(Fonts.font_MainMenu, "B. " + m_currentQA.B, new Vector2(
+                    (float)mcRects[1].X + 2.5f, (float)mcRects[1].Y + 10.0f), Color.Black);
+                spriteBatch.DrawString(Fonts.font_MainMenu, "C. " + m_currentQA.C, new Vector2(
+                    (float)mcRects[2].X + 2.5f, (float)mcRects[2].Y + 10.0f), Color.Black);
+                spriteBatch.DrawString(Fonts.font_MainMenu, "D. " + m_currentQA.D, new Vector2(
+                    (float)mcRects[3].X + 2.5f, (float)mcRects[3].Y + 10.0f), Color.Black);
             }
 
             // Draw Info Container

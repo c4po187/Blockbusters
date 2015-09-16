@@ -1,6 +1,8 @@
 ﻿#region Prerequisites
 
 using System.Collections.Generic;
+using BlockBusters.Data;
+using BlockBusters.Main;
 using BlockBusters.Sys;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -55,6 +57,7 @@ namespace BlockBusters.Graphics {
             m_delayTimer = 0.0;
             m_chosenLetter = '.';
             CurrentRow = 0;
+            m_prevHorzDirection = MoveDirection.Idle;
             initPlayables();
         }
 
@@ -67,6 +70,7 @@ namespace BlockBusters.Graphics {
         private bool m_bisDelay;
         private double m_delayTimer;
         private char m_chosenLetter;
+        private MoveDirection m_prevHorzDirection;
 
         #endregion
 
@@ -106,11 +110,34 @@ namespace BlockBusters.Graphics {
         }
 
         /// <summary>
+        /// Function that helps determine whether the selector should move up
+        /// or down when we move horizontally.
+        /// </summary>
+        /// <param name="isLeft">
+        /// Parameter specifies whether we are moving left or right.
+        /// </param>
+        /// <returns>
+        /// A MoveDirection.
+        /// </returns>
+        private MoveDirection determineVertical(bool isLeft) {
+            if (m_prevHorzDirection == MoveDirection.LeftUp ||
+                m_prevHorzDirection == MoveDirection.RightUp ||
+                m_prevHorzDirection == MoveDirection.Up) {
+                return isLeft ? MoveDirection.LeftDown : MoveDirection.RightDown;
+            }
+            else
+                return isLeft ? MoveDirection.LeftUp : MoveDirection.RightUp;
+        }
+
+        /// <summary>
         /// Function that calculates the direction of the selector based
         /// on user input.
         /// </summary>
         /// <param name="inputManager">
         /// Parameter represents the current input manager.
+        /// </param>
+        /// <param name="bottomBound">
+        /// Parameter represents the lower bounds (the selector must not go beyond here). 
         /// </param>
         /// <returns>
         /// A MoveDirection.
@@ -124,24 +151,24 @@ namespace BlockBusters.Graphics {
                 m_bisDelay = false;
                 return MoveDirection.Down;
             }
-            else if (inputManager.isKeyTapped(Keys.Left)) {
+            else if (inputManager.isKeyTapped(Keys.Left) || inputManager.isLeftDPadTapped()) {
                 m_bisDelay = false;
-                return (m_position.Y >= bottomBound) ? MoveDirection.LeftUp : MoveDirection.LeftDown;
+                if (m_position.Y >= bottomBound)
+                    return MoveDirection.LeftUp;
+                else
+                    return determineVertical(true);
             }
-            else if (inputManager.isKeyTapped(Keys.Right)) {
+            else if (inputManager.isKeyTapped(Keys.Right) || inputManager.isRightDPadTapped()) {
                 m_bisDelay = false;
-                return (m_position.Y >= bottomBound) ? MoveDirection.RightUp : MoveDirection.RightDown;
+                if (m_position.Y >= bottomBound)
+                    return MoveDirection.RightUp;
+                else
+                    return determineVertical(false);
             }
             else if (inputManager.isLeftThumbstickFacingUp() || inputManager.isUpDPadTapped())
                 return MoveDirection.Up;
             else if (inputManager.isLeftThumbstickFacingDown() || inputManager.isDownDPadTapped())
                 return MoveDirection.Down;
-            else if (inputManager.isLeftDPadTapped()) {
-                return (m_position.Y >= bottomBound) ? MoveDirection.LeftUp : MoveDirection.LeftDown;
-            }
-            else if (inputManager.isRightDPadTapped()) {
-                return (m_position.Y >= bottomBound) ? MoveDirection.RightUp : MoveDirection.RightDown;
-            }
             else if (inputManager.isLeftThumbstickFacingLeft()) {
                 return (inputManager.LeftThumbstickPosition.Value.Y <= 0) ? 
                     MoveDirection.LeftDown : MoveDirection.LeftUp;
@@ -208,8 +235,13 @@ namespace BlockBusters.Graphics {
             Vector2 prevPosition = new Vector2(m_position.X, m_position.Y);
 
             // Detect selection
-            if ((inputManager.isKeyTapped(Keys.Enter) || inputManager.isATapped()) && Visibility)
+            if ((inputManager.isKeyTapped(Keys.Enter) || inputManager.isATapped() ||
+                inputManager.isLeftMouseButtonTapped()) && Visibility &&
+                m_board.CurrentBoardState == BoardState.Standard) {
                 m_chosenLetter = getLetterFromCurrentHexagon();
+                m_board.CurrentQA = BlockBusters_Game.gs_QAComp.getRandomQA(m_chosenLetter);
+                m_board.RenderQA = true;
+            }
 
             /***** DEBUG *****/
             if (inputManager.isKeyTapped(Keys.Escape) && Visibility)
@@ -244,15 +276,19 @@ namespace BlockBusters.Graphics {
                             break;
                         case MoveDirection.LeftUp:
                             m_position += new Vector2(-hzMove, -(0.5f * vtMove));
+                            m_prevHorzDirection = moveDirection;
                             break;
                         case MoveDirection.LeftDown:
                             m_position += new Vector2(-hzMove, (0.5f * vtMove));
+                            m_prevHorzDirection = moveDirection;
                             break;
                         case MoveDirection.RightUp:
                             m_position += new Vector2(hzMove, -(0.5f * vtMove));
+                            m_prevHorzDirection = moveDirection;
                             break;
                         case MoveDirection.RightDown:
                             m_position += new Vector2(hzMove, (0.5f * vtMove));
+                            m_prevHorzDirection = moveDirection;
                             break;
                         case MoveDirection.Idle:
                             break;

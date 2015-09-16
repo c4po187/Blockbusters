@@ -23,6 +23,7 @@ namespace BlockBusters.Main {
                                 tex_BlueExlosion,
                                 tex_InGameBg,
                                 tex_InfoContainer,
+                                tex_qaContainer,
                                 tex_DBG_GPIC1,
                                 tex_DBG_GPIC2,
                                 tex_Dummy;

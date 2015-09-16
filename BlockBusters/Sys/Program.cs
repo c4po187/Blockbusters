@@ -25,7 +25,7 @@ namespace BlockBusters.Sys {
             //_WINAPI.AllocConsole();
             //_WINAPI.setupConsole();
 
-            using (var game = new Game1())
+            using (var game = new BlockBusters_Game())
                 game.Run();
         }
 

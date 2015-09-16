@@ -53,7 +53,7 @@
     <Compile Include="Graphics\Animated.cs" />
     <Compile Include="Graphics\Board.cs" />
     <Compile Include="Graphics\HexSelector.cs" />
-    <Compile Include="Main\Game1.cs" />
+    <Compile Include="Main\BlockBusters_Game.cs" />
     <Compile Include="Main\GlobalDefinitions.cs" />
     <Compile Include="Players\Human.cs" />
     <Compile Include="Players\Player.cs" />
@@ -122,6 +122,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Textures\purpleSpinParticle.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Textures\question_contain.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Textures\selectedHex.png">

@@ -26,7 +26,7 @@ namespace BlockBusters.Main {
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Game1 : Game {
+    public class BlockBusters_Game : Game {
 
         #region Declarations
 
@@ -38,7 +38,7 @@ namespace BlockBusters.Main {
         Board g_board;
         HexSelector g_hexSelector;
         Fader g_fader;
-        QA_Compiler g_QAComp;
+        public static QA_Compiler gs_QAComp;
         Vector2 g_baseScreenSize;
         Player[] g_players;
         bool g_bIsIntroStarted;
@@ -47,7 +47,7 @@ namespace BlockBusters.Main {
 
         #region Constructors
 
-        public Game1()
+        public BlockBusters_Game()
             : base() {
             g_graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -82,7 +82,7 @@ namespace BlockBusters.Main {
             g_baseScreenSize = startUpResolution;
 
             // Compile questions from XML
-            g_QAComp = new QA_Compiler().
+            gs_QAComp = new QA_Compiler().
                 setReader(@"Content\XML\QA\blockbusters_geography.xml").readDataToList().
                 setReader(@"Content\XML\QA\blockbusters_general-knowledge.xml").readDataToList().
                 setReader(@"Content\XML\QA\blockbusters_sports.xml").readDataToList();
@@ -124,6 +124,7 @@ namespace BlockBusters.Main {
             Textures.tex_MainMenuBg = Content.Load<Texture2D>(@"Textures\blockbustersMainMenuBG.png");
             Textures.tex_InGameBg = Content.Load<Texture2D>(@"Textures\dark-polygonal-objects.jpg");
             Textures.tex_InfoContainer = Content.Load<Texture2D>(@"Textures\infoContainergfx.png");
+            Textures.tex_qaContainer = Content.Load<Texture2D>(@"Textures\question_contain.png");
             Textures.tex_MainMenuSpinner = Content.Load<Texture2D>(@"Textures\purpleSpinParticle.png");
             Textures.tex_DBG_GPIC1 = Content.Load<Texture2D>(@"Textures\gpicC4PO.png");
             Textures.tex_DBG_GPIC2 = Content.Load<Texture2D>(@"Textures\gpicKENZI.png");
@@ -252,7 +253,7 @@ namespace BlockBusters.Main {
             if (g_hexSelector.ChosenLetter != '.') {
                 uint rBtn = 0;
                 try {
-                    QA q = g_QAComp.getRandomQA(g_hexSelector.ChosenLetter);
+                    QA q = gs_QAComp.getRandomQA(g_hexSelector.ChosenLetter);
                 }
                 catch (Exception) {
                 #if WINDOWS

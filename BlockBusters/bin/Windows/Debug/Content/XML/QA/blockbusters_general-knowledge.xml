@@ -27,6 +27,7 @@
     </Answers>
   </QA>
 
+  <!-- 3 - Datsun, now be Nissan -->
   <QA>
     <Question answer="B" difficulty="medium" alpha="D">What 'D' was the previous brand-name of the Nissan automotive corporation?</Question>
     <Answers>
@@ -34,6 +35,127 @@
       <B>Datsun</B>
       <C>Daimler</C>
       <D>Dayton</D>
+    </Answers>
+  </QA>
+  
+  <!-- 4 - Fur, is the hair of animals -->
+  <QA>
+    <Question answer="C" difficulty="easy" alpha="F">What 'F' is the correct term for hair found on the majority of animals?</Question>
+    <Answers>
+      <A>Fuzz</A>
+      <B>Fluff</B>
+      <C>Fur</C>
+      <D>Flump</D>
+    </Answers>
+  </QA>
+  
+  <!-- 5 - A Hermit spends bare time alone -->
+  <QA>
+    <Question answer="A" difficulty="medium" alpha="H">What 'H' is the term given to a person who spends most of their time alone?</Question>
+    <Answers>
+      <A>Hermit</A>
+      <B>Hermes</B>
+      <C>Herald</C>
+      <D>Hog</D>
+    </Answers>
+  </QA>
+  
+  <!-- 6 - Ignorant folk never take any notice -->
+  <QA>
+    <Question answer="D" difficulty="medium" alpha="I">What 'I' best describes a person who takes no notice?</Question>
+    <Answers>
+      <A>Idiot</A>
+      <B>Imbecile</B>
+      <C>Intellectual</C>
+      <D>Ignorant</D>
+    </Answers>
+  </QA>
+  
+  <!-- 7 - Luminescence is light emission -->
+  <QA>
+    <Question answer="B" difficulty="hard" alpha="L">What 'L' describes the emission of a substances light?</Question>
+    <Answers>
+      <A>Luminol</A>
+      <B>Luminescence</B>
+      <C>Lightening</C>
+      <D>Lunar</D>
+    </Answers>
+  </QA>
+  
+  <!-- 8 - Norwegians all want to die -->
+  <QA>
+    <Question answer="B" difficulty="medium" alpha="N">Which 'N' is the name of the country who holds the record for the highest number of suicides?</Question>
+    <Answers>
+      <A>Nigeria</A>
+      <B>Norway</B>
+      <C>Niger</C>
+      <D>North Korea</D>
+    </Answers>
+  </QA>
+  
+  <!-- 9 - Omega is the last letter in the Greek alphabet -->
+  <QA>
+    <Question answer="C" difficulty="medium" alpha="O">Which 'O' spells the name of the final letter in the Greek alphabet?</Question>
+    <Answers>
+      <A>Obama</A>
+      <B>Omnicron</B>
+      <C>Omega</C>
+      <D>Odessa</D>
+    </Answers>
+  </QA>
+  
+  <!-- 10 - All buggers are Queers :P (no shit mam!) -->
+  <QA>
+    <Question answer="D" difficulty="easy" alpha="Q">What 'Q' is a derogatory term for a homosexual?</Question>
+    <Answers>
+      <A>Qatar</A>
+      <B>Quiff</B>
+      <C>Quorn</C>
+      <D>Queer</D>
+    </Answers>
+  </QA>
+  
+  <!-- 11 - Ronald Reagan had his fingers in a few pies -->
+  <QA>
+    <Question answer="A" difficulty="easy" alpha="R">Whose first name starting with 'R', was an American president as well as an actor? </Question>
+    <Answers>
+      <A>Ronald</A>
+      <B>Richard</B>
+      <C>Robert</C>
+      <D>Rupert</D>
+    </Answers>
+  </QA>
+  
+  <!-- 12 - I like the yolk in my 'Uovo' runny -->
+  <QA>
+    <Question answer="D" difficulty="hard" alpha="U">What 'U' is the Italian word for an egg?</Question>
+    <Answers>
+      <A>Uggi</A>
+      <B>Uttu</B>
+      <C>Ughicetta</C>
+      <D>Uovo</D>
+    </Answers>
+  </QA>
+  
+  <!-- 13 - Yale is that Uni the yanks all wanna be at -->
+  <QA>
+    <Question answer="A" difficulty="medium" alpha="Y">What 'Y' is the name of a famous University in the USA?</Question>
+    <Answers>
+      <A>Yale</A>
+      <B>York</B>
+      <C>Yarmouth</C>
+      <D>Yardley</D>
+    </Answers>
+  </QA>
+  
+  <!-- 14 - Vogue be a big magazine -->
+  <QA>
+    <Question answer="C" difficulty="medium" alpha="V">What 'V' is the name of a well-known fashion magazine?</Question>
+    <Answers>
+      <A>Vibrance</A>
+      <B>Viper</B>
+      <C>Vogue</C>
+      <D>Vixen</D>
     </Answers>
   </QA>
   
