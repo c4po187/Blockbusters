@@ -9,6 +9,7 @@ using BlockBusters.Sys;
 using BlockBusters.Data;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 #endregion
 
@@ -73,12 +74,17 @@ namespace BlockBusters.Graphics {
             m_playableIndices = new List<int>();
             
             // Create Rectangles for the 4 choices
-            mcRects = new Rectangle[4];
+            m_mcRects = new Rectangle[4];
             int y = 180;
-            for (int r = 0; r < mcRects.Length; ++r) {
-                mcRects[r] = new Rectangle(660, y, 590, 60);
+            for (int r = 0; r < m_mcRects.Length; ++r) {
+                m_mcRects[r] = new Rectangle(660, y, 590, 60);
                 y += 80;
             }
+
+            // Create a selector for the multi choice questions
+            m_mcSelector = new Selector(Textures.tex_McSelector, 8, 0,
+                new Vector2((float)m_mcRects[0].Center.X, (float)m_mcRects[0].Center.Y));
+            m_resultTimer = .0f;
         }
 
         #endregion
@@ -95,7 +101,10 @@ namespace BlockBusters.Graphics {
         private bool m_initPlayables;
         private BoardState m_boardState;
         private QA m_currentQA;
-        private Rectangle[] mcRects;
+        private Rectangle[] m_mcRects;
+        private Selector m_mcSelector;
+        private bool mb_playerCorrect, mb_displayResult;
+        private float m_resultTimer;
 
         #endregion
 
@@ -151,6 +160,13 @@ namespace BlockBusters.Graphics {
         /// </summary>
         public bool RenderQA {
             get; set;
+        }
+
+        /// <summary>
+        /// Gets the multi-choice selector
+        /// </summary>
+        public Selector Selector {
+            get { return m_mcSelector; }
         }
 
         /***** DEBUG *****/
@@ -289,7 +305,7 @@ namespace BlockBusters.Graphics {
         /// <param name="gameTime">
         /// Provides a snapshot of timing values.
         /// </param>
-        public void update(GameTime gameTime) {
+        public void update(GameTime gameTime, InputManager inputManager) {
             switch (m_boardState) { 
                 case BoardState.ScramblingColours:
                     double scramblePerSec = .25;
@@ -310,7 +326,54 @@ namespace BlockBusters.Graphics {
                     /**
                      * @TODO:
                      * Handle logic for multi-choice answer buttons/areas (simple contains)
-                     */ 
+                     */
+                    if (m_mcSelector.Visibility) {
+                        if (m_mcSelector.Mutex.Equals(Selector.SelectorMutex.Unlocked)) {
+                            
+                            if (inputManager.isKeyTapped(Keys.Down)) {
+                                if (m_mcSelector.Position.Y < m_mcRects[3].Center.Y) {
+                                    m_mcSelector.move(Selector.Direction.MoveDown,
+                                        (float)m_mcRects[1].Center.Y - (float)m_mcRects[0].Center.Y);
+                                }
+                            } else if (inputManager.isKeyTapped(Keys.Up)) {
+                                if (m_mcSelector.Position.Y > m_mcRects[0].Center.Y) {
+                                    m_mcSelector.move(Selector.Direction.MoveUp,
+                                        (float)m_mcRects[1].Center.Y - (float)m_mcRects[0].Center.Y);
+                                }
+                            }
+
+                            if (inputManager.isKeyTapped(Keys.Enter)) {
+                                if ((int)m_mcSelector.Position.Y == m_mcRects[0].Center.Y)
+                                    mb_playerCorrect = (m_currentQA.answer == 'A');
+                                else if ((int)m_mcSelector.Position.Y == m_mcRects[1].Center.Y)
+                                    mb_playerCorrect = (m_currentQA.answer == 'B');
+                                else if ((int)m_mcSelector.Position.Y == m_mcRects[2].Center.Y)
+                                    mb_playerCorrect = (m_currentQA.answer == 'C');
+                                else if ((int)m_mcSelector.Position.Y == m_mcRects[3].Center.Y)
+                                    mb_playerCorrect = (m_currentQA.answer == 'D');
+
+                                mb_displayResult = true;
+                            }
+
+                            m_mcSelector.Mutex = Selector.SelectorMutex.Locked;
+                        }
+
+                        if (mb_displayResult) { 
+                            // Start timer
+                            m_resultTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                            if (m_resultTimer >= 1.5f) {
+                                m_resultTimer = .0f;
+                                mb_displayResult = false;
+                                m_mcSelector.Visibility = false;
+                                m_mcSelector.Position = new Vector2(
+                                    (float)m_mcRects[0].Center.X, (float)m_mcRects[0].Center.Y);
+                                RenderQA = false;
+                            }
+                        }
+
+                        m_mcSelector.update(gameTime);
+                    }
                     break;
             }
         }
@@ -367,6 +430,8 @@ namespace BlockBusters.Graphics {
             /* Draw the question and answer within the above container */
 
             if (RenderQA) {
+                m_mcSelector.Visibility = true;
+
                 // We need to figure out how many characters we can fit within the container
                 float charWidth = Fonts.font_MainMenu.MeasureString("A").X;
                 int actualSpacial = Textures.tex_qaContainer.Width - 10;
@@ -424,19 +489,37 @@ namespace BlockBusters.Graphics {
 
                 // Draw the rectangles
                 Textures.tex_Dummy.SetData(new Color[] { Color.FromNonPremultiplied(75, 110, 150, 255) });
-                foreach (Rectangle r in mcRects) {
+                foreach (Rectangle r in m_mcRects) {
                     spriteBatch.Draw(Textures.tex_Dummy, r, Color.Turquoise);
                 }
 
                 // Draw the multi choices
                 spriteBatch.DrawString(Fonts.font_MainMenu, "A. " + m_currentQA.A, new Vector2(
-                    (float)mcRects[0].X + 2.5f, (float)mcRects[0].Y + 10.0f), Color.Black);
+                    (float)m_mcRects[0].X + 10f, (float)m_mcRects[0].Y + 10.0f), Color.Black);
                 spriteBatch.DrawString(Fonts.font_MainMenu, "B. " + m_currentQA.B, new Vector2(
-                    (float)mcRects[1].X + 2.5f, (float)mcRects[1].Y + 10.0f), Color.Black);
+                    (float)m_mcRects[1].X + 10f, (float)m_mcRects[1].Y + 10.0f), Color.Black);
                 spriteBatch.DrawString(Fonts.font_MainMenu, "C. " + m_currentQA.C, new Vector2(
-                    (float)mcRects[2].X + 2.5f, (float)mcRects[2].Y + 10.0f), Color.Black);
+                    (float)m_mcRects[2].X + 10f, (float)m_mcRects[2].Y + 10.0f), Color.Black);
                 spriteBatch.DrawString(Fonts.font_MainMenu, "D. " + m_currentQA.D, new Vector2(
-                    (float)mcRects[3].X + 2.5f, (float)mcRects[3].Y + 10.0f), Color.Black);
+                    (float)m_mcRects[3].X + 10f, (float)m_mcRects[3].Y + 10.0f), Color.Black);
+
+                // Draw the selector
+                m_mcSelector.draw(spriteBatch);
+
+                if (mb_displayResult) {
+                    m_mcSelector.Mutex = Selector.SelectorMutex.Locked;
+                    
+                    if (mb_playerCorrect) {
+                        spriteBatch.DrawString(Fonts.font_MainMenu, "Correct, well done!",
+                            new Vector2(660.0f, (float)m_mcRects[3].Center.Y + 60.0f), Color.LimeGreen);
+                    } else {
+                        spriteBatch.DrawString(Fonts.font_MainMenu, "Incorrect!",
+                            new Vector2(660.0f, (float)m_mcRects[3].Center.Y + 60.0f), Color.Red);
+                    }
+                }
+
+            } else {
+                m_mcSelector.Visibility = false;
             }
 
             // Draw Info Container

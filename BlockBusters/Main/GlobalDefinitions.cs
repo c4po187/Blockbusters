@@ -17,6 +17,7 @@ namespace BlockBusters.Main {
 
         public static Texture2D tex_SplashBg,
                                 tex_HexSelector,
+                                tex_McSelector,
                                 tex_MainMenuTitle,
                                 tex_MainMenuBg,
                                 tex_MainMenuSpinner,

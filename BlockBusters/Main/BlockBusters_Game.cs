@@ -103,6 +103,7 @@ namespace BlockBusters.Main {
 
             Rectangle rectFromOblong = (Rectangle)g_oblong;
 
+            Textures.tex_McSelector = Content.Load<Texture2D>(@"Textures\peach_selector_animated.png");
             g_board = new Board(new Point(40, 30), mainTile);
 
             base.Initialize();
@@ -184,10 +185,10 @@ namespace BlockBusters.Main {
 
             /***** DEBUG *****/
             g_players = new Player[2];
-            g_players[0] = new Human("Artemis", Textures.tex_DBG_GPIC1) { 
+            g_players[0] = new Human("Cuntface", Textures.tex_DBG_GPIC1) { 
                 Position = new Vector2(40f, 625f), ReverseLayout = false
             };
-            g_players[1] = new Human("Wesley", Textures.tex_DBG_GPIC2) {
+            g_players[1] = new Human("Barry Bethel", Textures.tex_DBG_GPIC2) {
                 Position = new Vector2(1240f, 625f), ReverseLayout = true
             };
 
@@ -231,8 +232,10 @@ namespace BlockBusters.Main {
                     g_mainMenu.update(gameTime, g_inputManager);
                     break;
                 case GameState.Game_Running:
-                    g_board.update(gameTime);
-                    g_hexSelector.update(gameTime, g_inputManager);
+                    g_board.update(gameTime, g_inputManager);
+
+                    if (!g_board.Selector.Visibility)
+                        g_hexSelector.update(gameTime, g_inputManager);
 
                     for (int i = 0; i < g_players.Length; ++i)
                         g_players[i].update(gameTime);
@@ -295,7 +298,9 @@ namespace BlockBusters.Main {
                     break;
                 case GameState.Game_Running:
                     g_board.draw(g_spriteBatch);
-                    g_hexSelector.draw(g_spriteBatch);
+                    
+                    if (!g_board.Selector.Visibility)
+                        g_hexSelector.draw(g_spriteBatch);
 
                     for (int i = 0; i < g_players.Length; ++i)
                         g_players[i].draw(g_spriteBatch);

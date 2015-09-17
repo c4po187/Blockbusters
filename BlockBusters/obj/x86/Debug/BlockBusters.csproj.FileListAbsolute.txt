@@ -29,7 +29,6 @@ C:\Users\c4po\Documents\Visual Studio 2012\Projects\BlockBusters\BlockBusters\bi
 C:\Users\c4po\Documents\Visual Studio 2012\Projects\BlockBusters\BlockBusters\bin\Windows\Debug\SharpDX.Direct3D9.xml
 C:\Users\c4po\Documents\Visual Studio 2012\Projects\BlockBusters\BlockBusters\obj\x86\Debug\BlockBusters.exe
 C:\Users\c4po\Documents\Visual Studio 2012\Projects\BlockBusters\BlockBusters\obj\x86\Debug\BlockBusters.pdb
-C:\Users\c4po\Documents\Visual Studio 2012\Projects\BlockBusters\BlockBusters\obj\x86\Debug\BlockBusters.csprojResolveAssemblyReference.cache
 C:\Users\c4po\Documents\Visual Studio 2012\Projects\BlockBusters\BlockBusters\bin\Windows\Debug\EUMD_CS.dll
 C:\Users\c4po\Documents\Visual Studio 2012\Projects\BlockBusters\BlockBusters\bin\Windows\Debug\EUMD_CS.pdb
 C:\Users\c4po\Documents\Visual Studio 2012\Projects\BlockBusters\BlockBusters\bin\Windows\Debug\Content\Sounds\EUMD_SPLASH.wav
@@ -45,3 +44,5 @@ C:\Users\c4po\Documents\Visual Studio 2012\Projects\BlockBusters\BlockBusters\bi
 C:\Users\c4po\Documents\Visual Studio 2012\Projects\BlockBusters\BlockBusters\bin\Windows\Debug\Content\Textures\gpicC4PO.png
 C:\Users\c4po\Documents\Visual Studio 2012\Projects\BlockBusters\BlockBusters\bin\Windows\Debug\Content\Textures\gpicKENZI.png
 C:\Users\c4po\Documents\Visual Studio 2012\Projects\BlockBusters\BlockBusters\bin\Windows\Debug\Content\Textures\question_contain.png
+C:\Users\c4po\Documents\Visual Studio 2012\Projects\BlockBusters\BlockBusters\bin\Windows\Debug\Content\Textures\peach_selector_animated.png
+C:\Users\c4po\Documents\Visual Studio 2012\Projects\BlockBusters\BlockBusters\obj\x86\Debug\BlockBusters.csprojResolveAssemblyReference.cache
