@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using System.Text.RegularExpressions;
 using BlockBusters.Main;
@@ -10,6 +11,8 @@ using BlockBusters.Data;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using BlockBusters.Players;
+using EUMD_CS.Graphics;
 
 #endregion
 
@@ -63,16 +66,23 @@ namespace BlockBusters.Graphics {
         public Board(Point baseOffset, Tile tile) {
             m_baseOffset = baseOffset;
             m_tile = tile;
+
             boardLetters = new char[20];
             if (readBoardMap(@"Content\Textures\board.txt")) {
                 initBoard();
                 boardLetters = generateLetters();
             }
+            
             m_scrambleTimer = m_scramblePerTimer = 0.0;
             m_boardState = BoardState.ScramblingColours;
             m_initPlayables = true;
             m_playableIndices = new List<int>();
-            
+            m_hexMapper = new Dictionary<Vector2, Color>();
+            m_resultTimer = .0f;
+            mb_playResultSound = true;
+            mb_lastHex = mb_bonusActive = mb_edge1 = mb_edge2 = false;
+            m_pindex = m_qChances = 0;
+
             // Create Rectangles for the 4 choices
             m_mcRects = new Rectangle[4];
             int y = 180;
@@ -84,7 +94,6 @@ namespace BlockBusters.Graphics {
             // Create a selector for the multi choice questions
             m_mcSelector = new Selector(Textures.tex_McSelector, 8, 0,
                 new Vector2((float)m_mcRects[0].Center.X, (float)m_mcRects[0].Center.Y));
-            m_resultTimer = .0f;
         }
 
         #endregion
@@ -98,13 +107,16 @@ namespace BlockBusters.Graphics {
         private List<int> m_playableIndices;
         private char[] boardLetters;
         private double m_scrambleTimer, m_scramblePerTimer;
-        private bool m_initPlayables;
         private BoardState m_boardState;
         private QA m_currentQA;
         private Rectangle[] m_mcRects;
         private Selector m_mcSelector;
-        private bool mb_playerCorrect, mb_displayResult;
+        private bool mb_playerCorrect, mb_displayResult, mb_playResultSound,
+            mb_lastHex, m_initPlayables, mb_bonusActive;
         private float m_resultTimer;
+        private int m_pindex, m_qChances;
+        private Dictionary<Vector2, Color> m_hexMapper;
+        private bool mb_edge1, mb_edge2;
 
         #endregion
 
@@ -163,11 +175,21 @@ namespace BlockBusters.Graphics {
         }
 
         /// <summary>
-        /// Gets the multi-choice selector
+        /// Gets the multi-choice selector.
         /// </summary>
         public Selector Selector {
             get { return m_mcSelector; }
         }
+
+        /// <summary>
+        /// Gets and sets the players for the board.
+        /// </summary>
+        public Player[] Players { get; set; }
+
+        /// <summary>
+        /// Gets and sets the chosen hexagon index.
+        /// </summary>
+        public int ChosenHexIndex { get; set; }
 
         /***** DEBUG *****/
 
@@ -300,6 +322,59 @@ namespace BlockBusters.Graphics {
         }
 
         /// <summary>
+        /// Checks whether the game has been won.
+        /// </summary>
+        /// <param name="playerColor">
+        /// Indicates which player we are going to check,
+        /// using their color.
+        /// </param>
+        /// <returns>
+        /// True if the player's color has crossed the board,
+        /// being linked all the way across.
+        /// </returns>
+        private bool isBlockbusters(Vector2 startPosition, Color playerColor) {
+            // First let's see if we can find a k/v pair that matches the arguments
+            var temp = m_hexMapper.Where(h => h.Key == startPosition)
+                .Select(h => new { Key = h.Key, Value = h.Value })
+                .FirstOrDefault();
+
+            if (temp == null || temp.Value != playerColor) return false;
+
+            // Set up the playable board bounds (helps us define the edges)
+            float topBound = (float)m_hexagons[7].destination.Center.Y;
+            float leftBound = (float)m_hexagons[7].destination.Center.X;
+            float rightBound = (float)m_hexagons[9].destination.Center.X;
+            float bottomBound = (float)m_hexagons[33].destination.Center.Y;
+
+            // Check if we have any of the edges (Blue - left to right, White - top to bottom)
+            if ((temp.Key.X == leftBound && playerColor == Color.Blue) ||
+                (temp.Key.Y == topBound && playerColor == Color.White))
+                mb_edge1 = true;
+            if ((temp.Key.X == rightBound && playerColor == Color.Blue) ||
+                (temp.Key.Y == bottomBound && playerColor == Color.White))
+                mb_edge2 = true;
+
+            // Get a random number (6 possibilities)
+            Vector2 next = Vector2.Zero;
+            Random r = new Random();
+            int nri = r.Next(0, 6);
+
+            // Grab one of the surrounding hexagons using the random number from above
+            switch (nri) { 
+                case 0: next.X = temp.Key.X; next.Y = (temp.Key.Y - 82f); break;
+                case 1: next.X = (temp.Key.X + 80f); next.Y = (temp.Key.Y - 43f); break;
+                case 2: next.X = (temp.Key.X + 80f); next.Y = (temp.Key.Y + 43f); break;
+                case 3: next.X = temp.Key.X; next.Y = (temp.Key.Y + 82f); break;
+                case 4: next.X = (temp.Key.X - 80f); next.Y = (temp.Key.Y + 43f); break;
+                case 5: next.X = (temp.Key.X - 80f); next.Y = (temp.Key.Y - 43f); break;
+                default: break;
+            }
+
+            // Run recursively until we have both edges
+            return (mb_edge1 && mb_edge2) ? true : isBlockbusters(next, playerColor);
+        }
+
+        /// <summary>
         /// Updates and performs the logic of the board.
         /// </summary>
         /// <param name="gameTime">
@@ -323,13 +398,10 @@ namespace BlockBusters.Graphics {
                     refreshLetters();
                     break;
                 case BoardState.Standard:
-                    /**
-                     * @TODO:
-                     * Handle logic for multi-choice answer buttons/areas (simple contains)
-                     */
+                    Players[m_pindex].TurnSpec = TurnSpecifier.Engaging;
+
                     if (m_mcSelector.Visibility) {
                         if (m_mcSelector.Mutex.Equals(Selector.SelectorMutex.Unlocked)) {
-                            
                             if (inputManager.isKeyTapped(Keys.Down)) {
                                 if (m_mcSelector.Position.Y < m_mcRects[3].Center.Y) {
                                     m_mcSelector.move(Selector.Direction.MoveDown,
@@ -353,6 +425,7 @@ namespace BlockBusters.Graphics {
                                     mb_playerCorrect = (m_currentQA.answer == 'D');
 
                                 mb_displayResult = true;
+                                mb_playResultSound = true;
                             }
 
                             m_mcSelector.Mutex = Selector.SelectorMutex.Locked;
@@ -365,10 +438,77 @@ namespace BlockBusters.Graphics {
                             if (m_resultTimer >= 1.5f) {
                                 m_resultTimer = .0f;
                                 mb_displayResult = false;
-                                m_mcSelector.Visibility = false;
                                 m_mcSelector.Position = new Vector2(
                                     (float)m_mcRects[0].Center.X, (float)m_mcRects[0].Center.Y);
-                                RenderQA = false;
+
+                                if (m_qChances == 0 || m_qChances == 2) {
+                                    m_mcSelector.Visibility = false;
+                                    RenderQA = false;
+                                }
+                            }
+
+                            if (mb_playResultSound) {
+                                int color_index = (m_pindex == 0) ? m_pindex : 2;
+                                int bl_index = 0, h_index = 0;
+
+                                foreach (var hex in m_hexagons) {
+                                    if (hex.id == 1) {
+                                        if (bl_index == ChosenHexIndex) {
+                                            h_index = m_hexagons.IndexOf(hex);
+                                            break;
+                                        }
+                                        ++bl_index;
+                                    }
+                                }
+                                
+                                if (mb_playerCorrect) {
+                                    Sounds.sfx_Correct.Play(.35f, 1f, 0f);
+                                    Players[m_pindex].Correct = true;
+                                    Players[m_pindex].PWinType = mb_lastHex ? WinType.Round : WinType.Single;
+                                    Players[m_pindex].update();
+
+                                    if (mb_bonusActive) {
+                                        Players[m_pindex].Score += 25;
+                                        mb_bonusActive = false;
+                                    }
+
+                                    BoardHexagon tmp = m_hexagons[h_index];
+                                    tmp.source = m_tile.getSrcRect(color_index);
+                                    m_hexagons[h_index] = tmp;
+                                    boardLetters[ChosenHexIndex] = ' ';
+                                    m_qChances = 0;
+
+                                    Color changed = (color_index == 0) ? Color.White : Color.Blue;
+                                    Vector2 chosenPos = new Vector2(
+                                        (float)tmp.destination.Center.X, (float)tmp.destination.Center.Y);
+                                    m_hexMapper.Add(chosenPos, changed);
+
+                                    // @TODO: Check for game win....
+                                    if (isBlockbusters(chosenPos, changed)) { 
+                                        // End game for now, until we develop summat more...
+                                        StateManager.gameState = GameState.Exit;
+                                    }
+
+                                } else {
+                                    ++m_qChances;
+               
+                                    Sounds.sfx_Incorrect.Play(.35f, 1f, 0f);
+                                    Players[m_pindex].TurnSpec = TurnSpecifier.Waiting;
+                                    m_pindex = (m_pindex == (Players.Length - 1)) ? 0 : m_pindex + 1;
+
+                                    if (m_qChances == 1) {
+                                        mb_bonusActive = true;
+                                    } else if (m_qChances == 2) {
+                                        m_qChances = 0;
+                                        BoardHexagon tmp = m_hexagons[h_index];
+                                        tmp.source = m_tile.getSrcRect(3);
+                                        m_hexagons[h_index] = tmp;
+                                        boardLetters[ChosenHexIndex] = ' ';
+                                        mb_bonusActive = false;
+                                    }
+                                }
+
+                                mb_playResultSound = false;
                             }
                         }
 
@@ -525,6 +665,26 @@ namespace BlockBusters.Graphics {
             // Draw Info Container
             spriteBatch.Draw(Textures.tex_InfoContainer, new Rectangle(
                 5, 600, Textures.tex_InfoContainer.Width, Textures.tex_InfoContainer.Height), Color.White);
+
+            for (uint p = 0; p < Players.Length; ++p)
+                Players[p].draw(spriteBatch);
+
+            // Draw the scores, starting with the centre hyphen
+            string centreHyphen = "-";
+            float szHyphen = Fonts.font_MainMenu.MeasureString(centreHyphen).X;
+            spriteBatch.DrawString(Fonts.font_MainMenu, centreHyphen, new Vector2(
+                ((float)Textures.tex_InfoContainer.Width / 2f) - szHyphen,
+                (float)CommonResolutions.WXGA_H.height - ((float)Textures.tex_InfoContainer.Height / 2f) 
+                - 50f), Color.White, 0f, Vector2.Zero, 2f, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(Fonts.font_MainMenu, Players[0].Score.ToString(),
+                new Vector2(((float)Textures.tex_InfoContainer.Width / 2f) - 15f -
+                Fonts.font_MainMenu.MeasureString(Players[0].Score.ToString()).X * 2f,
+                (float)CommonResolutions.WXGA_H.height - ((float)Textures.tex_InfoContainer.Height / 2f)
+                - 50f), Color.White, 0f, Vector2.Zero, 2f, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(Fonts.font_MainMenu, Players[1].Score.ToString(),
+                new Vector2(((float)Textures.tex_InfoContainer.Width / 2f) + 15f,
+                (float)CommonResolutions.WXGA_H.height - ((float)Textures.tex_InfoContainer.Height / 2f)
+                - 50f), Color.White, 0f, Vector2.Zero, 2f, SpriteEffects.None, 0f);
         }
 
         /// <summary>

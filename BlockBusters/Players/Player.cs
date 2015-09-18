@@ -114,10 +114,7 @@ namespace BlockBusters.Players {
         /// <summary>
         /// Updates the logic of the Player.
         /// </summary>
-        /// <param name="gameTime">
-        /// Provides a snapshot of timing values.
-        /// </param>
-        public virtual void update(GameTime gameTime) {
+        public virtual void update() {
             if (m_bIsCorrect && m_turnSpec.HasFlag(TurnSpecifier.Engaging)) {
                 switch (m_winType) {
                     case WinType.Single:
@@ -130,9 +127,6 @@ namespace BlockBusters.Players {
                 }
             } else 
                 Consecutive = 0;
-
-            m_bIsCorrect = false;
-            m_turnSpec = TurnSpecifier.Waiting;
         }
 
         /// <summary>
@@ -143,19 +137,20 @@ namespace BlockBusters.Players {
         /// for drawing textures and alike.
         /// </param>
         public virtual void draw(SpriteBatch spriteBatch) {
-            // TODO : Set condition here and new DrawString for reverse layout
+            Color nameColor = (m_turnSpec == TurnSpecifier.Engaging) ? Color.Orange : Color.White;
+
             if (ReverseLayout) {
                 spriteBatch.Draw(m_gamerPic, new Rectangle(
                 (int)(m_position.X - m_gamerPic.Width), (int)m_position.Y, m_gamerPic.Width, m_gamerPic.Height), 
                 Color.White);
                 spriteBatch.DrawString(Fonts.font_MainMenu, m_name, new Vector2(
                     (float)(m_position.X - m_gamerPic.Width - 20 - (2f * Fonts.font_MainMenu.MeasureString(m_name).X)), 
-                    (m_position.Y - 10f)), Color.White, 0f, Vector2.Zero, 2f, SpriteEffects.None, 0f);
+                    (m_position.Y - 10f)), nameColor, 0f, Vector2.Zero, 2f, SpriteEffects.None, 0f);
             } else {
                 spriteBatch.Draw(m_gamerPic, new Rectangle(
                 (int)m_position.X, (int)m_position.Y, m_gamerPic.Width, m_gamerPic.Height), Color.White);
                 spriteBatch.DrawString(Fonts.font_MainMenu, m_name, new Vector2(
-                    (float)(m_position.X + m_gamerPic.Width + 20), (m_position.Y - 10f)), Color.White, 0f,
+                    (float)(m_position.X + m_gamerPic.Width + 20), (m_position.Y - 10f)), nameColor, 0f,
                     Vector2.Zero, 2f, SpriteEffects.None, 0f);
             }
         }

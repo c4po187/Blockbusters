@@ -34,18 +34,6 @@ namespace BlockBusters.Players {
         }
 
         #endregion
-
-        #region Declarations
-        #endregion
-
-        #region Properties
-        #endregion
-
-        #region Functions
-
-
-
-        #endregion
     }
 
     #endregion

@@ -117,7 +117,7 @@ namespace BlockBusters.Graphics {
 
             // Check to see if the mutex is locked, if so start the timer
             if (m_mutex == SelectorMutex.Locked) {
-                m_lockTimer += (float)gameTime.ElapsedGameTime.Milliseconds;
+                m_lockTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
                 // When we have reached 1/3 of a second, unlock the mutex
                 if (m_lockTimer >= 3.333f) {

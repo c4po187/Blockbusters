@@ -38,7 +38,9 @@ namespace BlockBusters.Main {
 
         public static SoundEffect sfx_Splash,
                                   sfx_MenuSweep,
-                                  sfx_MenuTrack;
+                                  sfx_MenuTrack,
+                                  sfx_Correct,
+                                  sfx_Incorrect;
 
         #endregion
     }

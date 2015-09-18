@@ -1,11 +1,9 @@
 ﻿#region Prerequisites
 
-using System;
 using System.Collections.Generic;
 using BlockBusters.Graphics;
 using BlockBusters.Main;
 using BlockBusters.Sys;
-using EUMD_CS.Graphics.GeometryPrimitives;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -55,12 +53,6 @@ namespace BlockBusters.UI {
         public MainMenu(GraphicsDevice gfxDevice, Texture2D background) {
             m_gfxDevice = gfxDevice;
             m_background = background;
-
-            // TODO: Set this properly when we ready
-            m_selector = new Selector {
-                Bounds = new Oblong(Point.Zero, 1, 1, Color.Crimson, m_gfxDevice),
-                Visible = false
-            };
 
             // Init lists
             m_animations = new List<Animated>();

@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using BlockBusters.Graphics;
 using BlockBusters.Sys;
-using EUMD_CS.Graphics.GeometryPrimitives;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -16,20 +15,7 @@ namespace BlockBusters.UI {
     #region Objects
 
     /// <summary>
-    /// Class that defines a rectangular shaped Selector.
-    /// </summary>
-    public class Selector {
-
-        #region Properties
-
-        public Oblong Bounds { get; set; }
-        public bool Visible { get; set; }
-
-        #endregion
-    }
-
-    /// <summary>
-    /// Class that defines a simple selective area (Menu Option, etc...).
+    /// A class that defines a simple selective area (Menu Option, etc...).
     /// </summary>
     public class Selective {
 
@@ -50,7 +36,6 @@ namespace BlockBusters.UI {
 
         #region Declarations
 
-        protected Selector m_selector;
         protected Color m_hoverColour;
         protected List<Selective> m_selectives;
         protected List<Animated> m_animations;
@@ -60,10 +45,6 @@ namespace BlockBusters.UI {
         #endregion
 
         #region Properties
-
-        public Selector MenuSelector {
-            get { return m_selector; }
-        }
 
         public List<Selective> Selectives {
             get { return m_selectives; }
@@ -95,14 +76,13 @@ namespace BlockBusters.UI {
                     animation.updateAnimation(gameTime);
 
                 /* Check to see if a selective has been selected/hovering and
-                 * initiate any sub-menu/options. 
-                 */
+                    * initiate any sub-menu/options. 
+                    */
                 foreach (Selective selective in m_selectives) {
-                    if (selective.Container.Intersects((Rectangle)m_selector.Bounds) ||
-                        (inputManager.MouseLocation.X > selective.Container.Left &&
+                    if (inputManager.MouseLocation.X > selective.Container.Left &&
                         inputManager.MouseLocation.X < selective.Container.Right &&
                         inputManager.MouseLocation.Y > selective.Container.Top &&
-                        inputManager.MouseLocation.Y < selective.Container.Bottom)) {
+                        inputManager.MouseLocation.Y < selective.Container.Bottom) {
                         selective.Hover = true;
                         if (inputManager.isATapped() || inputManager.isStartTapped() ||
                         inputManager.isKeyTapped(Keys.Enter) || inputManager.isLeftMouseButtonTapped()) {
@@ -166,9 +146,6 @@ namespace BlockBusters.UI {
 
                 }
             }
-
-            if (m_selector.Visible)
-                m_selector.Bounds.draw(null);
         }
 
         #endregion

@@ -104,6 +104,7 @@ namespace BlockBusters.Main {
             Rectangle rectFromOblong = (Rectangle)g_oblong;
 
             Textures.tex_McSelector = Content.Load<Texture2D>(@"Textures\peach_selector_animated.png");
+           
             g_board = new Board(new Point(40, 30), mainTile);
 
             base.Initialize();
@@ -134,6 +135,8 @@ namespace BlockBusters.Main {
             Sounds.sfx_Splash = Content.Load<SoundEffect>(@"Sounds\EUMD_SPLASH");
             Sounds.sfx_MenuSweep = Content.Load<SoundEffect>(@"Sounds\menuSweep");
             Sounds.sfx_MenuTrack = Content.Load<SoundEffect>(@"Sounds\blockbustersAmbient");
+            Sounds.sfx_Correct = Content.Load<SoundEffect>(@"Sounds\correct");
+            Sounds.sfx_Incorrect = Content.Load<SoundEffect>(@"Sounds\incorrect");
 
             // Init Fading Splash
             g_fader = new Fader(Textures.tex_SplashBg, Point.Zero,
@@ -185,15 +188,16 @@ namespace BlockBusters.Main {
 
             /***** DEBUG *****/
             g_players = new Player[2];
-            g_players[0] = new Human("Cuntface", Textures.tex_DBG_GPIC1) { 
-                Position = new Vector2(40f, 625f), ReverseLayout = false
+            g_players[0] = new Human("1UP", Textures.tex_DBG_GPIC1) { 
+                Position = new Vector2(40f, 625f), ReverseLayout = false, Score = 0
             };
-            g_players[1] = new Human("Barry Bethel", Textures.tex_DBG_GPIC2) {
-                Position = new Vector2(1240f, 625f), ReverseLayout = true
+            g_players[1] = new Human("2UP", Textures.tex_DBG_GPIC2) {
+                Position = new Vector2(1240f, 625f), ReverseLayout = true, Score = 0
             };
 
-            /***** DEBUG *****/
-            //Console.WriteLine("All content loaded successfully...");
+            g_board.Players = g_players;
+
+            g_board.Players[0].TurnSpec = TurnSpecifier.Engaging;
         }
 
         /// <summary>
@@ -237,9 +241,7 @@ namespace BlockBusters.Main {
                     if (!g_board.Selector.Visibility)
                         g_hexSelector.update(gameTime, g_inputManager);
 
-                    for (int i = 0; i < g_players.Length; ++i)
-                        g_players[i].update(gameTime);
-
+                    g_board.ChosenHexIndex = g_hexSelector.ChosenHexIndex;
                     break;
                 case GameState.Game_Paused:
                     break;
@@ -250,25 +252,6 @@ namespace BlockBusters.Main {
                     break;
                 default:
                     break;
-            }
-
-            /***** DEBUG *****/
-            if (g_hexSelector.ChosenLetter != '.') {
-                uint rBtn = 0;
-                try {
-                    QA q = gs_QAComp.getRandomQA(g_hexSelector.ChosenLetter);
-                }
-                catch (Exception) {
-                #if WINDOWS
-                    rBtn = _WINAPI.MessageBox(
-                        new IntPtr(0), String.Concat(
-                        "Currently no questions for the letter ", 
-                        g_hexSelector.ChosenLetter.ToString()),
-                        "Selector", MessageBoxType.MB_OK | MessageBoxType.MB_ICONINFORMATION);
-                #endif
-                }
-                if (rBtn == MessageBoxButtonOutput.IDOK)
-                    g_hexSelector.ChosenLetter = '.';
             }
 
             base.Update(gameTime);
@@ -301,9 +284,6 @@ namespace BlockBusters.Main {
                     
                     if (!g_board.Selector.Visibility)
                         g_hexSelector.draw(g_spriteBatch);
-
-                    for (int i = 0; i < g_players.Length; ++i)
-                        g_players[i].draw(g_spriteBatch);
 
                     break;
                 case GameState.Game_Paused:

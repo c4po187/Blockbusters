@@ -85,6 +85,11 @@ namespace BlockBusters.Graphics {
             set { m_chosenLetter = value; }
         }
 
+        /// <summary>
+        /// Gets and privately sets the chosen board hexagon index.
+        /// </summary>
+        public int ChosenHexIndex { get; private set; }
+
         #endregion
 
         #region Functions
@@ -105,8 +110,8 @@ namespace BlockBusters.Graphics {
         /// </returns>
         public char getLetterFromCurrentHexagon() {
             Point pPos = new Point((int)m_position.X, (int)m_position.Y);
-            return m_board.BoardLetters[m_playableHexagons.FindIndex(
-                x => x.destination.Center.Equals(pPos))];
+            ChosenHexIndex = m_playableHexagons.FindIndex(x => x.destination.Center.Equals(pPos));
+            return m_board.BoardLetters[ChosenHexIndex];
         }
 
         /// <summary>
@@ -239,8 +244,10 @@ namespace BlockBusters.Graphics {
                 inputManager.isLeftMouseButtonTapped()) && Visibility &&
                 m_board.CurrentBoardState == BoardState.Standard) {
                 m_chosenLetter = getLetterFromCurrentHexagon();
-                m_board.CurrentQA = BlockBusters_Game.gs_QAComp.getRandomQA(m_chosenLetter);
-                m_board.RenderQA = true;
+                if (m_chosenLetter != ' ') {
+                    m_board.CurrentQA = BlockBusters_Game.gs_QAComp.getRandomQA(m_chosenLetter);
+                    m_board.RenderQA = true;
+                }
             }
 
             /***** DEBUG *****/
